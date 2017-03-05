@@ -132,6 +132,14 @@ public:
         String &payload
     );
     static void sendCoap(IPv6Address &address, CoApPacket &packet);
+    static void get(IPv6Address &address, String &uri);
+    static void post(IPv6Address &address, String &uri, String &data);
+    static void put(IPv6Address &address, String &uri, String &data);
+    static void del(IPv6Address &address, String &uri);
+    static void get(IPv6Address &address, const char uri[]);
+    static void post(IPv6Address &address, const char uri[], const char data[]);
+    static void put(IPv6Address &address, const char uri[], const char data[]);
+    static void del(IPv6Address &address, const char uri[]);
 };
 
 

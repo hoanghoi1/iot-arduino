@@ -53,6 +53,7 @@ extern "C" {
 #include "XBee.h"
 #include "IPv6Stack.h"
 #include "arduino_debug.h"
+#include "CoAp_conf.h"
 
 #ifndef NULL
 #define NULL 0
@@ -320,4 +321,55 @@ void IPv6Stack::sendCoap(IPv6Address &address, CoApPacket &packet) {
     uint16_t packetLength = packet.getPacketLength();
     byte * packetBuffer = packet.getPacket();
     IPv6Stack::udpSend(address, COAP_PORT, packetBuffer, packetLength);
+}
+
+void IPv6Stack::get(IPv6Address &address, String &uri) {
+    CoApPacket packet;
+    packet.setUri(uri);
+    IPv6Stack::sendCoap(address, packet);
+}
+
+void IPv6Stack::get(IPv6Address &address, const char uri[]) {
+    String uriString(uri);
+    IPv6Stack::get(address, uriString);
+}
+
+void IPv6Stack::post(IPv6Address &address, String &uri, String &data) {
+    CoApPacket packet;
+    packet.setMethod(COAP_POST);
+    packet.setUri(uri);
+    packet.setPayload(data);
+    IPv6Stack::sendCoap(address, packet);
+}
+
+void IPv6Stack::post(IPv6Address &address, const char uri[], const char data[]) {
+    String uriString(uri);
+    String dataString(data);
+    IPv6Stack::post(address, uriString, dataString);
+}
+
+void IPv6Stack::put(IPv6Address &address, String &uri, String &data) {
+    CoApPacket packet;
+    packet.setMethod(COAP_PUT);
+    packet.setUri(uri);
+    packet.setPayload(data);
+    IPv6Stack::sendCoap(address, packet);
+}
+
+void IPv6Stack::put(IPv6Address &address, const char uri[], const char data[]) {
+    String uriString(uri);
+    String dataString(data);
+    IPv6Stack::put(address, uriString, dataString);
+}
+
+void IPv6Stack::del(IPv6Address &address, String &uri) {
+    CoApPacket packet;
+    packet.setMethod(COAP_DELETE);
+    packet.setUri(uri);
+    IPv6Stack::sendCoap(address, packet);
+}
+
+void IPv6Stack::del(IPv6Address &address, const char uri[]) {
+    String uriString(uri);
+    IPv6Stack::del(address, uriString);
 }

@@ -54,7 +54,7 @@ boolean CoApPacket::pushHeader() {
 }
 
 boolean CoApPacket::pushFooter() {
-    if (payload.length() > 0) {
+    if (method != COAP_GET) {
         return true;
     }
 
@@ -105,6 +105,10 @@ boolean CoApPacket::pushQueries() {
 }
 
 boolean CoApPacket::pushPayload() {
+    if (method == COAP_GET || method == COAP_DELETE) {
+        return true;
+    }
+    
     char i;
     char len = payload.length();
     if (len == 0) {

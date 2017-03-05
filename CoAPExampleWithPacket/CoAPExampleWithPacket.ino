@@ -151,32 +151,11 @@ void loop(){
   if (send_timer.expired()){
       send_timer.reset();
       Serial.println();
-      Serial.print("MEMORY LEFT:");
-      Serial.println(mem());
-      Serial.println("Sending data..");
-      delay(50);
-      unsigned char payload[12];
-      payload[0] = 0x40;
-      payload[1] = 0x01;
-      payload[2] = 0xc3;
-      payload[3] = 0x00;
-      payload[4] = 0xb5;
-      payload[5] = 0x6c;
-      payload[6] = 0x69;
-      payload[7] = 0x6e;
-      payload[8] = 0x6b;
-      payload[9] = 0x31;
-      payload[10] = 0xc1;
-      payload[11] = 0x02;
-      // char temp[8];
-
-    // sprintf(temp, "%x", payload[0]);
-      IPv6Stack::udpSend(addr_dest, dest_port, payload, 12);
       Serial.println("Sending CoAP data..");
       delay(200);
       IPv6Stack::sendCoap(addr_dest, coapPacket);
-      
-//      IPv6Stack::sendCoAPpacket(addr_dest, coap_uri , coap_query , coap_query_opt , coap_payload_string);
+      delay(200);
+      IPv6Stack::get(addr_dest, "test/sub?a=b&c=d");
   }
 #endif
   //We always check if we got anything. If we did, process that with the IPv6 Stack
