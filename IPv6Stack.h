@@ -51,15 +51,17 @@ extern "C" {
 #include "MACLayer.h"
 #include "IPv6Address.h"
 #include "IPv6llAddress.h"
+#include "CoApPacket.h"
 #include "IPv6Timer.h"
 
 // define coap
+#define COAP_PORT 5683
 #define UIP_IPH_LEN    40   /* Size of IPv6 header */
 #define UIP_UDPH_LEN    8    /* Size of UDP header */
 #define UIP_IPUDPH_LEN (UIP_UDPH_LEN + UIP_IPH_LEN)    /* Size of IP + UDP header */
 #define UIP_BUFSIZE  160 // The size of the uIP packet buffer.
 #define UIP_UDP_PAYLOAD_MAX_BUFSIZE (UIP_BUFSIZE - UIP_IPUDPH_LEN) // The max size of the UDP datagram payload buffer. ( 160 - 48 )
-
+#define COAP_PACKET_SIZE UIP_UDP_PAYLOAD_MAX_BUFSIZE
 
 class IPv6Stack {
 private:
@@ -83,7 +85,6 @@ private:
 
     static const u16_t coap_port = 5683; // CoAP packets are sent 5683 by default.
     static const u16_t source_port = 61616; // UDP Source Port Number. Chosed 61616 (0xF0B0) for 6lowpan compression from 16 to 4 bits http://tools.ietf.org/html/rfc6282#section-4.3.1
-    static const int COAP_PACKET_SIZE = UIP_UDP_PAYLOAD_MAX_BUFSIZE; // CoAP packet should be less than UIP_UDP_PAYLOAD_MAX_BUFSIZE 112 bytes in this example
     static char packetBuffer[ COAP_PACKET_SIZE ]; // Buffer to hold outgoing packets
     static unsigned int messageID;
 
@@ -130,6 +131,7 @@ public:
         String &secondQuery,
         String &payload
     );
+    static void sendCoap(IPv6Address &address, CoApPacket &packet);
 };
 
 

@@ -47,6 +47,7 @@ extern "C" {
 #include "ctimer.h"
 #include "neighbor_info.h"
 #include "rpl.h"
+//#include "CoApPacket.h"
 #include <string.h> 
 }
 #include "XBee.h"
@@ -215,12 +216,12 @@ void IPv6Stack::ping(IPv6Address &dest, uint8_t datalength) {
 }
 
 /* sendCoAPpacket function arguments :
-  * IPAddress& address : IP adress of the CoAP server
-  * String uri         : URI you want to access ('/' are not needed)
-  * String query       : URI query optionnal, example : ?query=1
-  * String query       : URI query optionnal, example : &query=2
-  * String payload     : the actual payload
-*/
+ * IPAddress& address : IP adress of the CoAP server
+ * String uri         : URI you want to access ('/' are not needed)
+ * String query       : URI query optionnal, example : ?query=1
+ * String query       : URI query optionnal, example : &query=2
+ * String payload     : the actual payload
+ */
 
 /*
  * uri → input name
@@ -237,7 +238,7 @@ void IPv6Stack::sendCoAPpacket(
         String &query,
         String &secondQuery,
         String &payload
-    ) {
+        ) {
     // Based on draft-ietf-core-coap-13 :  http://tools.ietf.org/html/draft-ietf-core-coap-13
     //memset(packetBuffer, 0, COAP_PACKET_SIZE * sizeof(byte));
 
@@ -311,11 +312,12 @@ void IPv6Stack::sendCoAPpacket(
         packetBuffer[i + index] = payload.charAt(i);
     }
     index += i;
-
-    // all CoAP fields have been given values, now
-    // you can send a packet requesting a PUT request
-
-    //  IPv6Stack::udp_send(&address, source_port, coap_port, packetBuffer, index);
     IPv6Stack::udpSend(address, 5683, packetBuffer, index);
-//    IPv6Stack::udpSend(const IPv6Address &to, uint16_t remote_port, const void *data, uint16_t datalen);
+}
+
+void IPv6Stack::sendCoap(IPv6Address &address, CoApPacket &packet) {
+    packet.makePacket();
+    uint16_t packetLength = packet.getPacketLength();
+    byte * packetBuffer = packet.getPacket();
+    IPv6Stack::udpSend(address, COAP_PORT, packetBuffer, packetLength);
 }
