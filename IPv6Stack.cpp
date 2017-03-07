@@ -55,6 +55,9 @@ extern "C" {
 #include "arduino_debug.h"
 #include "CoAp_conf.h"
 
+#define DEBUG DEBUG_PRINT
+#include "uip_debug.h"
+
 #ifndef NULL
 #define NULL 0
 #endif /* NULL */
@@ -112,6 +115,9 @@ IPv6Stack::receiver(struct simple_udp_connection *c,
         uint16_t receiver_port,
         const uint8_t *data,
         uint16_t datalen) {
+    PRINTF("\nReceiver data:");
+    PRINTF_DEC(receiver_port);
+    PRINTF_DEC(sender_port);
     IPv6Stack::udp_data = data;
     IPv6Stack::udp_data_length = datalen;
     IPv6Stack::udp_data_length_left = datalen;
