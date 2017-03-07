@@ -135,7 +135,7 @@ bool XBeeMACLayer::sendAtCommand() {
 }
 
 bool XBeeMACLayer::init(){    
-    xbee.begin(9600); 
+    xbee.begin(38400); 
     delay(3000); //wait for the XBEE to initialize
         
     mac_position = 0;    
