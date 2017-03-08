@@ -50,7 +50,7 @@
 #include "uip_ds6.h"
 #endif
 
-#define DEBUG DEBUG_NONE
+#define DEBUG DEBUG_PRINT
 #include "uip_debug.h"
 
 #define UIP_ICMP_BUF ((struct uip_icmp_hdr *)&uip_buf[UIP_LLIPH_LEN + uip_ext_len])

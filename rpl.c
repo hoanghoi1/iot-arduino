@@ -45,7 +45,7 @@
 #include "rpl_private.h"
 #include "neighbor_info.h"
 
-#define DEBUG DEBUG_NONE
+#define DEBUG DEBUG_PRINT
 #include "uip_debug.h"
 
 #include <limits.h>
