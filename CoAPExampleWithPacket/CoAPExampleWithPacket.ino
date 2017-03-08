@@ -64,23 +64,23 @@ bool change_addr_prefix(IPv6Address &address){
 
 //This is what we will run as a result of receiving a UDP message. We first use the serial port to show what we received, wait half of the sending time and send the response to the sender that is, actually, the same message inverted
 void udp_callback(char *data, int datalen, int sender_port, IPv6Address &sender_addr){
-  Serial.println(mem());
+  Serial1.println(mem());
   delay(100);
   //Show received dada
   data[datalen] = 0;
-  Serial.println();
-  Serial.println();
-  Serial.print("Data received from ip: ");
+  Serial1.println();
+  Serial1.println();
+  Serial1.print("Data received from ip: ");
   sender_addr.print();
-  Serial.print(" port: ");
-  Serial.print(sender_port);
-  Serial.print(", data: ");
+  Serial1.print(" port: ");
+  Serial1.print(sender_port);
+  Serial1.print(", data: ");
   //Serial.println(data); //could do it this way too, but we try the other way just to test
   //Show data
   while (IPv6Stack::udpDataAvailable()){
-     Serial.print(IPv6Stack::readUdpData());
+     Serial1.print(IPv6Stack::readUdpData());
   }
-  Serial.println();
+  Serial1.println();
         
     //In case we have been given a prefix by a router and we have validated our global address, change the address of the sender by changing its prefix. It is related to the same router, messages will go through it
   if (!change_addr_prefix(sender_addr)){
@@ -93,8 +93,8 @@ void udp_callback(char *data, int datalen, int sender_port, IPv6Address &sender_
     
   delay(SEND_INTERVAL/2);//take SEND_INTERVAL/2 to respond
 
-  Serial.println("Sending response..");
-  Serial.println(); 
+  Serial1.println("Sending response..");
+  Serial1.println(); 
   delay(50); 
   int j;
   for(j=0; j<datalen; ++j){
@@ -107,39 +107,40 @@ void udp_callback(char *data, int datalen, int sender_port, IPv6Address &sender_
   send_timer.restart();//each time we receive something we reset this timer so we should not send in the main loop as long as our message is responded
 }
 
-void setup(){  
-  Serial.begin(9600);
+void setup(){
+  Serial.begin(38400);
+  Serial1.begin(38400);
   delay(1000);
-  Serial.println();
+  Serial1.println();
   delay(100);
   
   // init network-device
   if (!IPv6Stack::initMacLayer(&macLayer)){
-    Serial.println("CANNOT INITIALIZE XBEE MODULE.. CANNOT CONTINUE");
+    Serial1.println("CANNOT INITIALIZE XBEE MODULE.. CANNOT CONTINUE");
     while (true){};
   }
   
   //init IP Stack
   IPv6Stack::initIpStack();  
-  Serial.println("IPV6 INITIALIZED");
+  Serial1.println("IPV6 INITIALIZED");
   delay(100);
   
   //init UDP
   IPv6Stack::initUdp(UDP_PORT);
-  Serial.println("UDP INITIALIZED");
+  Serial1.println("UDP INITIALIZED");
   delay(100);
   
   //If Border Router, set prefix. If not, set a timer to send data
   #if !IS_BORDER_ROUTER
       send_timer.set(SEND_INTERVAL);
-      Serial.println("SEND TIMER SET");
+      Serial1.println("SEND TIMER SET");
       delay(50);      
   #else
       //This line is added to specify our prefix    
       IPv6Stack::setPrefix(prefix, 64); 
   #endif /*IS_BORDER_ROUTER*/
   
-  Serial.println("SETUP FINISHED!");
+  Serial1.println("SETUP FINISHED!");
   delay(100);
 }
 
@@ -150,8 +151,8 @@ void loop(){
 #if !UIP_CONF_ROUTER
   if (send_timer.expired()){
       send_timer.reset();
-      Serial.println();
-      Serial.println("Sending CoAP data..");
+      Serial1.println();
+      Serial1.println("Sending CoAP data..");
       delay(200);
       IPv6Stack::sendCoap(addr_dest, coapPacket);
       delay(200);
@@ -160,7 +161,7 @@ void loop(){
 #endif
   //We always check if we got anything. If we did, process that with the IPv6 Stack
   if (IPv6Stack::receivePacket()){
-    Serial.println("receiver data");
+    Serial1.println("receiver data");
 #if !IS_BORDER_ROUTER
       //If we are not configured as border router, check if udp data is available and run the callback with it
       if (IPv6Stack::udpDataAvailable()){

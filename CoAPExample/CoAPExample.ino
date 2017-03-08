@@ -106,7 +106,7 @@ void udp_callback(char *data, int datalen, int sender_port, IPv6Address &sender_
 }
 
 void setup(){  
-  Serial.begin(9600);
+  Serial.begin(38400);
   delay(1000);
   Serial.println();
   delay(100);

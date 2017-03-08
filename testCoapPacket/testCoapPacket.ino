@@ -4,7 +4,7 @@ CoApPacket packet;
 CoApPacket packet1;
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(38400);
     delay(1000);
     packet.init();
     packet1.init();
