@@ -43,7 +43,7 @@
 #include "clock.h" //ADDED ALE
 #include "ctimer.h"
 
-#define DEBUG DEBUG_NONE
+#define DEBUG DEBUG_PRINT
 #include "uip_debug.h"
 
 static uint16_t timeout = 0;

@@ -42,7 +42,7 @@
 
 #include "packetbuf.h"
 
-#define DEBUG DEBUG_NONE
+#define DEBUG DEBUG_PRINT
 #include "uip_debug.h"
 
 #define ETX_LIMIT		15
